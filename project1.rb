@@ -21,7 +21,7 @@ def parse(url)
   ret = ""
   URI.open(url) do |rss|
     feed = RSS::Parser.parse(rss)
-    ret += "<h1 style='margin-bottom:60px;'>#{feed.channel.title}</h1>"
+    ret += "<body style='margin:50px'><h1 style='margin-bottom:60px;'>#{feed.channel.title}</h1>"
     feed.items.each do |item|
       ret += "<div style='margin-bottom:50px;'><h3>#{item.title}</h3>"
       ret += "<p><strong>Published:</strong> #{item.pubDate}</p>"
@@ -33,7 +33,7 @@ def parse(url)
       if related.length > 0
         ret += "<p><strong>Related Topics:</strong> #{related.inspect}</p>"
       end
-      ret += "<a href='#{item.link}' target='_blank'>Read More</a></div>"
+      ret += "<a href='#{item.link}' target='_blank'>Read More</a></div></body>"
     end
   end
   return ret
