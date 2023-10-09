@@ -3,15 +3,21 @@ require 'rss'
 require 'open-uri'
 
 def RSScode(url)
-  arr = Array.new
-  URI.open(url) do |rss|
-    feed = RSS::Parser.parse(rss)
-    puts "Title: #{feed.channel.title}"
-    arr.push("Title: #{feed.channel.title}")
-    feed.items.each do |item|
-      puts "Item: #{item.title}"
-      arr.push("Item: #{item.title}")
+  arr = []
+  begin
+    URI.open(url) do |rss|
+      feed = RSS::Parser.parse(rss)
+      puts "Title: #{feed.channel.title}"
+      arr.push("Title: #{feed.channel.title}")
+      feed.items.each do |item|
+        puts "Item: #{item.title}"
+        arr.push("Item: #{item.title}")
+      end
     end
+  rescue StandardError => e
+    # Handle the error and return an empty array
+    puts "Error: #{e.message}"
+    arr = []
   end
 
 
