@@ -17,35 +17,24 @@ require 'rss'
 require 'open-uri'
 require 'socket'
 
-server = TCPServer.new(1337)
-
-loop do
-    client = server.accept
-
-# client.puts "What's your name?"
-# input = client.gets
-# puts "Received #{input.chomp} from a client socket on 1337"
-# client.puts "Hi, #{input.chomp}! You've successfully connected to the server socket."
-
-# url = gets 
-# client.puts "Your URL #{url}"
-#sputs url
-#url = 'https://medium.com/feed/@olegchursin/'
-
-client.puts "Enter URL"
-url = client.gets.chomp
-client.puts "Your URL #{url}"
-
-open(url) do |rss|
-  feed = RSS::Parser.parse(rss)
-  client.puts "Title: #{feed.channel.title}"
-  feed.items.each do |item|
-    client.puts "Item: #{item.title}"
+def parse(url)
+  ret = ""
+  URI.open(url) do |rss|
+    feed = RSS::Parser.parse(rss)
+    ret += "<h1 style='margin-bottom:60px;'>#{feed.channel.title}</h1>"
+    feed.items.each do |item|
+      ret += "<div style='margin-bottom:50px;'><h3>#{item.title}</h3>"
+      ret += "<p><strong>Published:</strong> #{item.pubDate}</p>"
+      ret += "<p><strong>Description:</strong> #{item.description}</p>"
+      related = Array.new
+      item.categories.each do |sub|
+          related.push(sub.content)
+      end
+      if related.length > 0
+        ret += "<p><strong>Related Topics:</strong> #{related.inspect}</p>"
+      end
+      ret += "<a href='#{item.link}' target='_blank'>Read More</a></div>"
+    end
   end
+  return ret
 end
-
-
-client.puts "Goodbye #{input}"
-  client.close
-end
-
