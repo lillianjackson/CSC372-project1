@@ -3,20 +3,14 @@
 #Resources used for reference: https://www.codementor.io/projects/web/rss-feed-reader-website-atx32j280x
 # https://medium.com/@krandles/rss-and-ruby-its-really-simple-a32a8654733a
 
-
-=begin
-this is a basic outline of the project
-
-first we need to get the user to give a url to a website 
-then we need to figureout how to rss into the website to display the title desritption of the website and link to original content
-
-there are a couple of other challenges we could do but we should get the basics done first and see if we have time to implement the rest 
-=end
-
 require 'rss'
 require 'open-uri'
 require 'socket'
 
+=begin
+  This function takes in a url and parses it then. It then returns the proper
+  html code that must be used to display this information
+=end
 def parse(url)
   ret = ""
   URI.open(url) do |rss|
